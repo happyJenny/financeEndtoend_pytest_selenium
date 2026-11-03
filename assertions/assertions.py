@@ -1,0 +1,13 @@
+class UIError(Exception):
+    def __init__(self,msg,*,current_url=None, from_disable=False):
+        super().__init__(msg)
+        self.msg=msg
+        self.current_url=current_url
+        self.from_disable=from_disable
+
+class RegisterError(UIError):...
+class LoginError(UIError):...
+class TransferError(UIError):...
+class DepositError(UIError):...
+
+

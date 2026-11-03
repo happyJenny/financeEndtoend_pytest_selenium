@@ -1,6 +1,7 @@
 from selenium.common.exceptions import TimeoutException
 from pages.base_page import BasePage
 from selenium.webdriver.common.by import By
+from assertions.assertions import RegisterError
 
 class RegisterPage(BasePage):
         # TIMEOUT =10
@@ -14,6 +15,19 @@ class RegisterPage(BasePage):
             self.fill((By.NAME,"phone"),phone,t)
             self.fill((By.NAME,"idCard"),idCard,t)
             self.click((By.CSS_SELECTOR,"button[type='submit']"),t)
+
+            try:
+                self.wait_url_contains("login",timeout=5)
+                return None
+            except TimeoutException:
+                pass
+
+            try:
+                error=self.text_of_visible((By.CSS_SELECTOR,".msg.msg-error"),timeout=self.TIMEOUT)
+                raise RegisterError(error,current_url=self.driver.current_url)
+            except TimeoutException:    
+                error=self.get_first_invalid_msg()
+                raise RegisterError(error,current_url=self.driver.current_url)    
 
 
         def register_ok(self):     

@@ -1,6 +1,6 @@
-
+import re
 import pytest
-
+from assertions.assertions import RegisterError
 # from  util.util import to_login_register_page,regist,login,switch_tab,open_account
 from data.user_factory import Users_Factory
 
@@ -44,15 +44,16 @@ def test_register_validation(driver_conftest,username,password,realname,idCard,p
         
         hp.to_login_register_page("register", "注册")
         register_Page=RegisterPage(driver)
+        with pytest.raises(RegisterError,match=re.escape(msg)):
+                 register_Page.register(username,password,realname,idCard,phone)
 
-        register_Page.register(username,password,realname,idCard,phone)
-        invalid=register_Page.get_first_invalid_msg()
-        # print(invalid)
-        if invalid:
-           actual_msg=invalid
-        #    print(f"some{actual_msg}")
-           assert msg in actual_msg,f"原始html actual_msg is {actual_msg}, expected msg is {msg}"     
-        else:
-            actual_msg=register_Page.register_fail_msg()
-        #    print(f"regist_fail_{actual_msg}")
-            assert msg in actual_msg, f"后端 actual_msg is {actual_msg}, expected msg is {msg}"
+      #   invalid=register_Page.get_first_invalid_msg()
+      #   # print(invalid)
+      #   if invalid:
+      #      actual_msg=invalid
+      #   #    print(f"some{actual_msg}")
+      #      assert msg in actual_msg,f"原始html actual_msg is {actual_msg}, expected msg is {msg}"     
+      #   else:
+      #       actual_msg=register_Page.register_fail_msg()
+      #   #    print(f"regist_fail_{actual_msg}")
+      #       assert msg in actual_msg, f"后端 actual_msg is {actual_msg}, expected msg is {msg}"
