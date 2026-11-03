@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+*.egg-info/
+.venv/
+venv/
+
+# 配置（本地）
+config/config.yaml
+
+# 产物
+all_code.txt
+reports/
+deprecate/
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# 浏览器日志
+*.log
+geckodriver.log
+
+#输出对比
+to_afile.py
