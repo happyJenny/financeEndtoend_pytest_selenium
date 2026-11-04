@@ -6,10 +6,10 @@ class HomePage(BasePage):
 
 
 
-        def to_login_register_page(self,page_name,title,timeout=None): 
+        def to_login_register_page(self,page_name,title): 
             # print(page_name,title,timeout)
             self.goto()
-            self.wait_title_contains("Finance",timeout=timeout)
-            self.click((By.CSS_SELECTOR,f"[href='/{page_name}.html']"),timeout=timeout)
-            self.wait_title_contains(title,timeout=timeout)    
+            self.wait_title_contains("Finance")
+            self.click((By.CSS_SELECTOR,f"[href='/{page_name}.html']"))
+            self.wait_title_contains(title)    
 

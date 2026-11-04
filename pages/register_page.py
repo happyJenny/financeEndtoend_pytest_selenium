@@ -8,58 +8,26 @@ class RegisterPage(BasePage):
 
 
         def register(self,username,password,realName,idCard,phone):
-            t = self.TIMEOUT
-            self.fill((By.NAME,"username"),username,t)
-            self.fill((By.NAME,"password"),password,t)
-            self.fill((By.NAME,"realName"),realName,t)
-            self.fill((By.NAME,"phone"),phone,t)
-            self.fill((By.NAME,"idCard"),idCard,t)
-            self.click((By.CSS_SELECTOR,"button[type='submit']"),t)
+            # t = self.TIMEOUT
+            self.fill((By.NAME,"username"),username)
+            self.fill((By.NAME,"password"),password)
+            self.fill((By.NAME,"realName"),realName)
+            self.fill((By.NAME,"phone"),phone)
+            self.fill((By.NAME,"idCard"),idCard)
+            self.click((By.CSS_SELECTOR,"button[type='submit']"))
 
             try:
-                self.wait_url_contains("login",timeout=5)
+                self.wait_url_contains("login")
                 return None
-            except TimeoutException:
+            except TimeoutException:    
                 pass
 
             try:
-                error=self.text_of_visible((By.CSS_SELECTOR,".msg.msg-error"),timeout=self.TIMEOUT)
+                error=self.text_of_visible((By.CSS_SELECTOR,".msg.msg-error"),timeout=self.SHORT_TIMEOUT)
                 raise RegisterError(error,current_url=self.driver.current_url)
             except TimeoutException:    
                 error=self.get_first_invalid_msg()
                 raise RegisterError(error,current_url=self.driver.current_url)    
 
 
-        def register_ok(self):     
-            try:
-                self.wait_url_contains("login",timeout=10)
-                return  True
-            except TimeoutException:
-                return False    
-
-        def register_fail_msg(self):
-                # print(self.current_url())
-            # if "login" not in self.current_url():
-                return self.text_of_visible((By.CSS_SELECTOR,".msg.msg-error"),timeout=self.TIMEOUT)
-                # raise AssertionError(f"注册失败: {err} (url={self.current_url()})")
-
-        # def register_blank_msg(self,blank,msg="请填写此字段"):     
-        #          return self.find_visible((By.CSS_SELECTOR,f"input[name='{blank}']")).text   
-
-        # def get_first_invalid_msg(self):
-        #     """
-        #     获取表单中第一个未通过 HTML5 校验的输入框的错误信息。
-        #     如果全部通过，返回空字符串。
-        #     """
-        #                     # let form = document.getElementById('registerForm'); // 假设你的表单id是这个
-        #     # 使用 JavaScript 直接查询表单中所有的 input，并找出第一个 :invalid 的元素
-        #     script = """
-
-        #         let invalidInput = document.querySelector('input:invalid');
-        #         return invalidInput ? invalidInput.validationMessage : '';
-        #     """
-        #     return self.driver.execute_script(script)         
-
-
-
-  
+ 

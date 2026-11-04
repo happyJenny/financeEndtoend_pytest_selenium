@@ -8,7 +8,10 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 class BasePage:
-    TIMEOUT =5
+    SHORT_TIMEOUT = 2      # inline 提示、invisible 判断、快速探活
+    LONG_TIMEOUT  = 10     # 页面跳转、表单提交后结果、余额刷新
+    TIMEOUT = LONG_TIMEOUT
+    INLINE_POLL = 0.1 
     def __init__(self,driver,base_url="http://localhost:8080/"):
         self.driver=driver
         self.base_url=base_url
@@ -20,7 +23,17 @@ class BasePage:
          return self.driver.current_url    
 
     def _wait(self,timeout=None):
-         return WebDriverWait(self.driver,timeout=timeout or self.TIMEOUT)
+        #  return WebDriverWait(self.driver,timeout=timeout or self.TIMEOUT)
+         return WebDriverWait(self.driver,timeout=self.TIMEOUT if timeout is None else timeout)    
+
+             
+    def _wait_inline(self, timeout=None):
+        """瞬时等待：0.1s 高频轮询，用于出现快消失快的 inline 提示"""
+        return WebDriverWait(
+            self.driver,
+            timeout=self.SHORT_TIMEOUT if timeout is None else timeout,
+            poll_frequency=self.INLINE_POLL,
+        )
 
     def find(self,locator,timeout=None):
         return self._wait(timeout=timeout).until(

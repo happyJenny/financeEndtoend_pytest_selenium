@@ -24,10 +24,10 @@ def _login_and_open_transfer(driver,username,password):
         hp.to_login_register_page("login", "登录")
         login_Page=LoginPage(driver)
         login_Page.login(username,password)
-        ok=login_Page.loign_ok()
+        # ok=login_Page.loign_ok()
+        assert "dashboard" in driver.current_url
 
-
-        assert ok, f"failed msg is {login_Page.login_fail_msg()}"
+        # assert ok, f"failed msg is {login_Page.login_fail_msg()}"
         dashboard_page=DashboardPage(driver)
         dashboard_page.to_transfer_page()
         transfer_page=TransferPage(driver)
@@ -75,8 +75,9 @@ def test_transfer_invalid(driver_conftest,accountNum,amount,msg):
         with pytest.raises(TransferError,match=re.escape(msg)):
                 transfer_page.transfer(accountNum,amount)
 
-
+        assert transfer_page.is_form_ready(), "失败后已离开转账页"
         new_balance=transfer_page.myBalance()   
+
         assert round(new_balance*100)==round(old_balance*100)
 
 

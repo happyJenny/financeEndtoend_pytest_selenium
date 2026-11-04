@@ -10,8 +10,7 @@ class TransferPage(BasePage):
         # TIMEOUT =10
 
         def myBalance(self):
-            t = self.TIMEOUT
-            raw= self.text_of_visible((By.ID,"myBalance"),t).strip()
+            raw= self.text_of_visible((By.ID,"myBalance")).strip()
             # raw = self.text_of_visible(self.BALANCE).strip()
             m = re.search(r"(-?\d[\d,]*\.?\d*)", raw)   # 抓数字（含千分位）
             if not m:
@@ -92,13 +91,12 @@ class TransferPage(BasePage):
 
 
         def transfer(self, toAccount, amount, remark=None):
-            t = self.TIMEOUT
             if remark is None:
                 remark = f"转账 {amount}"
-            self.fill((By.NAME, "toAccountNo"), toAccount, t)
-            self.fill((By.NAME, "amount"), str(amount), t)
-            self.fill((By.NAME, "remark"), remark, t)
-            self.click((By.CSS_SELECTOR, "button[type='submit']"), t)
+            self.fill((By.NAME, "toAccountNo"), toAccount)
+            self.fill((By.NAME, "amount"), str(amount))
+            self.fill((By.NAME, "remark"), remark)
+            self.click((By.CSS_SELECTOR, "button[type='submit']"))
 
             success_loc = (By.CSS_SELECTOR, ".inline-msg.success")
             inline_err  = (By.CSS_SELECTOR, ".inline-msg.error")
@@ -117,7 +115,7 @@ class TransferPage(BasePage):
 
             # ── 第一段：2s 抓两个 inline，轮询 0.1s 防漏 ──
             try:
-                first = WebDriverWait(self.driver, timeout=2, poll_frequency=0.1).until(
+                first = self._wait_inline().until(
                     EC.any_of(
                         EC.text_to_be_present_in_element(success_loc, f"转账成功 -¥{amount}"),
                         EC.visibility_of_element_located(inline_err),

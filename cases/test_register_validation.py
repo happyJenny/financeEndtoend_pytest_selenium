@@ -20,8 +20,9 @@ def test_register_ok(driver_conftest):
         registerData = Users_Factory.build()
         print(registerData)
         register_Page.register(**registerData)
-        ok=register_Page.register_ok()
-        assert ok, f"failed msg is {register_Page.register_fail_msg()}"
+        # ok=register_Page.register_ok()
+        # assert ok, f"failed msg is {register_Page.register_fail_msg()}"
+        assert "login" in driver.current_url
 
 @pytest.mark.validation   
 @pytest.mark.parametrize("username,password,realname,idCard,phone,msg",
